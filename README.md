@@ -2,6 +2,8 @@
 
 Solução de automação e BI desenvolvida para o **Desafio 01** da 4ª edição do **O-HACKA-TÁ-ON**, hackathon promovido pela **M. Dias Branco**, em parceria com a **Universidade de Fortaleza (Unifor Hub)** e a **Profectum** — maio de 2026.
 
+<img width="968" height="686" alt="image" src="https://github.com/user-attachments/assets/4e5325e1-7eda-49e4-92fc-7c028f5a0da7" />
+
 > 🏅 Certificado de participação emitido pela M. Dias Branco / Unifor / Profectum.
 
 ---
@@ -21,6 +23,7 @@ O desafio pedia uma solução que **automatizasse e centralizasse** essas inform
 ## 💡 A solução
 
 Construí um pipeline de **ETL automatizado** (extração, tratamento e carga) que elimina o tratamento manual de planilhas, conectando um relatório bruto até um dashboard executivo atualizado automaticamente:
+<img width="1665" height="860" alt="Protótipo-Desafio1" src="https://github.com/user-attachments/assets/3312ad8f-e282-48d5-b681-dc719d74719e" />
 
 ```
 Arquivo único (CSV) chega numa pasta do SharePoint
@@ -59,6 +62,7 @@ Um dos principais problemas encontrados durante o desenvolvimento foi a quebra d
 A condicional também garante que a primeira linha (cabeçalho) e linhas vazias nunca cheguem ao SharePoint, evitando dados "sujos" no repositório oficial.
 
 ## 📊 Dashboard — Power BI
+https://app.powerbi.com/view?r=eyJrIjoiMTQyMGY2YmMtZTU2Yy00ZDBkLThlMGUtYTA1MGZiZDgzZjM1IiwidCI6IjQyNjZjOGY5LTZkMjQtNGRlMy04MjA3LTgzN2I2ZTVmMmJmOCJ9 [Certificado-O-hack-ata-on-M.DiasBranco.pdf](https://github.com/user-attachments/files/29724972/Certificado-O-hack-ata-on-M.DiasBranco.pdf)
 
 O dashboard **"Acompanhamento Executivo — Engajamento de Treinamentos"** conecta diretamente na lista do SharePoint alimentada pelo fluxo acima, e traz:
 
@@ -67,11 +71,11 @@ O dashboard **"Acompanhamento Executivo — Engajamento de Treinamentos"** conec
 - Ranking de engajamento por estado, com filtro dinâmico por área
 - Medidas construídas em **DAX**, com tratamento de formatação regional (moeda em Real, separador decimal brasileiro)
 
-`![Dashboard Power BI](./assets/dashboard.png)`
+![Dashboard Power BI](./assets/dashboard.png)
 
 ## 🖼️ O desafio original
 
-`![Card do Desafio 01](./assets/desafio-01.jpg)`
+![Card do Desafio 01](./assets/desafio-01.jpg)
 
 ## 🛠️ Stack
 
