@@ -25,6 +25,8 @@ O desafio pedia uma solução que **automatizasse e centralizasse** essas inform
 Construí um pipeline de **ETL automatizado** (extração, tratamento e carga) que elimina o tratamento manual de planilhas, conectando um relatório bruto até um dashboard executivo atualizado automaticamente:
 <img width="1665" height="860" alt="Protótipo-Desafio1" src="https://github.com/user-attachments/assets/3312ad8f-e282-48d5-b681-dc719d74719e" />
 
+> A lógica completa do fluxo, com expressões e decisões de design, está documentada em docs/flow-schema.json.
+
 ```
 Arquivo único (CSV) chega numa pasta do SharePoint
         │
