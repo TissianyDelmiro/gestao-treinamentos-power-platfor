@@ -1,0 +1,81 @@
+{
+  "name": "Automação - Consolidação de Cursos (HCM)",
+  "description": "Fluxo ETL que lê um relatório CSV de treinamentos depositado no SharePoint, valida e limpa cada linha, e grava os dados tratados em uma lista do SharePoint para consumo direto pelo Power BI.",
+  "note": "Este arquivo é uma representação lógica e documental do fluxo, escrita manualmente para fins de portfólio. Não é um pacote de exportação real do Power Automate e não contém nenhuma credencial, connectionReference, tenant ID ou URL interna.",
+  "trigger": {
+    "type": "SharePoint - When a file is created",
+    "description": "Monitora uma pasta específica de uma biblioteca de documentos no SharePoint. É disparado quando um novo arquivo CSV é depositado nessa pasta.",
+    "site": "<site-sharepoint>",
+    "folder": "<pasta-relatorios>"
+  },
+  "actions": [
+    {
+      "step": 1,
+      "name": "Get file content",
+      "type": "SharePoint - Get file content",
+      "description": "Captura o conteúdo binário bruto do arquivo CSV recém-criado."
+    },
+    {
+      "step": 2,
+      "name": "Compose",
+      "type": "Data Operation - Compose",
+      "description": "Converte o conteúdo binário em texto puro (string), preparando o arquivo para ser processado linha por linha.",
+      "expression": "string(triggerBody())"
+    },
+    {
+      "step": 3,
+      "name": "Separar Linhas",
+      "type": "Data Operation - Compose",
+      "description": "Quebra o texto completo em uma lista (array) de registros individuais, usando a quebra de linha como delimitador.",
+      "expression": "split(outputs('Compose'), decodeUriComponent('%0A'))"
+    },
+    {
+      "step": 4,
+      "name": "Apply to each",
+      "type": "Control - Apply to each",
+      "description": "Percorre cada uma das linhas geradas no passo anterior (no case real, 1.402 linhas), processando um registro por vez.",
+      "input": "outputs('Separar_Linhas')"
+    },
+    {
+      "step": 5,
+      "name": "Condition",
+      "type": "Control - Condition",
+      "description": "Filtro de segurança com duas validações combinadas: descarta linhas vazias e descarta a linha de cabeçalho (que contém os títulos das colunas, ex: 'Id', 'Nome').",
+      "expression_examples": [
+        "length(item()) > 1",
+        "split(item(), ',')[0] != 'Id'"
+      ],
+      "branches": {
+        "false": {
+          "description": "Linha vazia ou cabeçalho — descartada, nenhuma ação executada."
+        },
+        "true": {
+          "description": "Linha de dados válida — segue para gravação.",
+          "next_step": 6
+        }
+      }
+    },
+    {
+      "step": 6,
+      "name": "Create item",
+      "type": "SharePoint - Create item",
+      "description": "Fatia a linha de texto usando vírgula como separador e distribui os valores nas colunas da lista do SharePoint, mapeando por índice numérico (e não por nome de coluna) para garantir estabilidade caso o schema do relatório varie levemente.",
+      "target_list": "<lista-sharepoint-participantes>",
+      "field_mapping_example": {
+        "Id": "split(item(), ',')[0]",
+        "Nome": "split(item(), ',')[1]",
+        "Area": "split(item(), ',')[2]",
+        "Status": "split(item(), ',')[3]"
+      }
+    }
+  ],
+  "downstream": {
+    "consumer": "Power BI",
+    "description": "O Power BI se conecta diretamente à lista do SharePoint já tratada e tipada, atualizando automaticamente os indicadores de conclusão, engajamento por estado e status geral, sem qualquer tratamento manual de planilha."
+  },
+  "design_decisions": [
+    "Mapeamento por índice numérico em vez de nome de coluna, para evitar quebras de schema (ex: erro de coluna 'Title' obrigatória no SharePoint).",
+    "Dupla condição de filtro (linha vazia + cabeçalho) para impedir dados 'sujos' na lista oficial.",
+    "Uso de decodeUriComponent('%0A') para representar quebra de linha na expressão de split, contornando limitações de caracteres especiais direto no editor."
+  ]
+}
